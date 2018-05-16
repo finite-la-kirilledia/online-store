@@ -34,10 +34,11 @@
 
     <!-- Content -->
     <div class="row">
-        {% for book in books %}
+        {% for bookImage in booksImages %}
             <div class="col-3">
-                {{ book.name }}
-
+                <img height="200px" src="{{ bookImage.image.url }}">
+                {{ bookImage.book.name }}
+                {{ bookImage.book.price }}
             </div>
         {% endfor %}
     </div>

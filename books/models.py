@@ -18,7 +18,7 @@ class BookStatus(models.Model):
 
 class Book(models.Model):
     name = models.CharField(max_length=225)
-    description = models.CharField(max_length=225)
+    description = models.TextField(blank=True, null=True, default=None)
     price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True, default=None)
     publisher = models.CharField(max_length=225, blank=True, null=True, default=None)
     pages = models.IntegerField(blank=True, null=True, default=None)
@@ -37,10 +37,14 @@ class Book(models.Model):
     #     verbose_name_plural = 'Книги'
 
 
-class Image(models.Model):
+class BookImage(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
 
     image = models.ImageField(upload_to='books_images/')
+    is_main = models.BooleanField(default=False)
+
+    def __str__(self):
+        return '{} - {}'.format(self.id, self.book.name)
 
     # class Meta:
     #     verbose_name = 'Картинка'

@@ -4,7 +4,7 @@ from .models import *
 
 
 class BookImageInline(admin.TabularInline):
-    model = Image
+    model = BookImage
     extra = 0
 
 
@@ -19,4 +19,4 @@ class BookAdmin(admin.ModelAdmin):
 admin.site.register(Book, BookAdmin)
 
 admin.site.register(BookStatus)
-admin.site.register(Image)
+admin.site.register(BookImage)
