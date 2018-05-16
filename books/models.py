@@ -1,5 +1,7 @@
 from django.db import models
 
+from accounts.models import User
+
 
 class BookStatus(models.Model):
     name = models.CharField(max_length=225)
@@ -37,8 +39,19 @@ class Book(models.Model):
 
 class Image(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+
     image = models.ImageField(upload_to='books_images/')
 
     # class Meta:
     #     verbose_name = 'Картинка'
     #     verbose_name_plural = 'Картинки'
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+
+    text = models.CharField(max_length=225)
+
+    created_date = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated_date = models.DateTimeField(auto_now_add=False, auto_now=True)

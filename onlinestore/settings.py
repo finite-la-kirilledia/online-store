@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'frontend',
     'accounts',
     'books',
     'orders',
@@ -55,12 +56,12 @@ ROOT_URLCONF = 'onlinestore.urls'
 
 SETTINGS_PATH = os.path.dirname(__file__)
 PROJECT_PATH = os.path.join(SETTINGS_PATH, os.pardir)
-TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'templates')
+TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'frontend/templates')
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'frontend/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

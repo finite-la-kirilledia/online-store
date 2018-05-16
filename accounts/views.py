@@ -2,16 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 
 from .forms import UserLoginForm, UserCreationForm
-
-
-# Create your views here.
-def index(request):
-    context = {
-        'userLoginForm': UserLoginForm(),
-        'userCreationForm': UserCreationForm()
-    }
-
-    return render(request, 'index.html', context)
+from frontend.views import index
 
 
 def login(request):
@@ -24,10 +15,12 @@ def login(request):
             user = authenticate(email=email, password=password)
             django_login(request, user)
 
+            return index(request)
+
     form = UserLoginForm()
     context = {'form': form}
 
-    return render(request, 'index.html', context)
+    return render(request, 'frontend/index.html', context)
 
 
 def register(request):
@@ -42,12 +35,14 @@ def register(request):
             if user:
                 django_login(request, user)
 
+                return index(request)
+
     context = {
         'userLoginForm': UserLoginForm(),
         'userCreationForm': UserCreationForm()
     }
 
-    return render(request, 'index.html', context)
+    return render(request, 'frontend/index.html', context)
 
 
 def logout(request):

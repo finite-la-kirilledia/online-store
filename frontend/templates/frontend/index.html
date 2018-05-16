@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="{% static 'frontend/css/libs/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'frontend/js/libs/jquery-3.2.1.slim.min.js' %}"></script>
+    <script src="{% static 'frontend/js/libs/popper.min.js' %}"></script>
+    <script src="{% static 'frontend/js/libs/bootstrap.min.js' %}"></script>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="row">
+        <div class="col">
+            {% if user.is_authenticated %}
+                <!-- Выйти -->
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="">Выйти</button>
+                </form>
+            {% else %}
+                <!-- Войти -->
+                {% include 'frontend/login_modal.html' %}
+            {% endif %}
+        </div>
+    </div>
+    <!-- End of Header -->
+
+    <!-- Content -->
+    <div class="row">
+        {% for book in books %}
+            <div class="col-3">
+                {{ book.name }}
+
+            </div>
+        {% endfor %}
+    </div>
+    <!-- End of Content -->
+
+</div>
+<!-- End of container -->
+
+</body>
+</html>

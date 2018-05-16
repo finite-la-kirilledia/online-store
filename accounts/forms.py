@@ -5,8 +5,10 @@ from accounts.models import User
 
 
 class UserLoginForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email address'}),
-                             max_length=225)
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={'required id': 'id_email_login', 'class': 'form-control', 'placeholder': 'Email address'}),
+        max_length=225)
     password = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Password'}),
                                max_length=225)
 
@@ -14,7 +16,8 @@ class UserLoginForm(forms.Form):
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(label='Email',
+                             widget=forms.EmailInput(attrs={'required id': 'id_email_reg', 'class': 'form-control'}))
     name = forms.CharField(label='Name', widget=forms.TextInput(attrs={'class': 'form-control'}))
     surname = forms.CharField(label='Surname', widget=forms.TextInput(attrs={'class': 'form-control'}))
     phone = forms.CharField(label='Phone', widget=forms.TextInput(attrs={'class': 'form-control'}))
