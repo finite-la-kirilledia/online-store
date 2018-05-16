@@ -24,7 +24,7 @@ SECRET_KEY = '*3hy$gn-f8w-b3(bi83*x6&b6nj@h0^zl&s89fcyky*)0e=cpt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['onlinestore.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 # Application definition
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'accounts',
     'books',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -52,10 +53,14 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'onlinestore.urls'
 
+SETTINGS_PATH = os.path.dirname(__file__)
+PROJECT_PATH = os.path.join(SETTINGS_PATH, os.pardir)
+TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'templates')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -11,7 +11,7 @@ def index(request):
         'userCreationForm': UserCreationForm()
     }
 
-    return render(request, 'accounts/index.html', context)
+    return render(request, 'index.html', context)
 
 
 def login(request):
@@ -27,7 +27,7 @@ def login(request):
     form = UserLoginForm()
     context = {'form': form}
 
-    return render(request, 'accounts/index.html', context)
+    return render(request, 'index.html', context)
 
 
 def register(request):
@@ -39,13 +39,15 @@ def register(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password1']
             user = authenticate(email=email, password=password)
-            django_login(request, user)
-    else:
-        form = UserCreationForm()
+            if user:
+                django_login(request, user)
 
-    context = {'form': form}
+    context = {
+        'userLoginForm': UserLoginForm(),
+        'userCreationForm': UserCreationForm()
+    }
 
-    return render(request, 'accounts/index.html', context)
+    return render(request, 'index.html', context)
 
 
 def logout(request):
