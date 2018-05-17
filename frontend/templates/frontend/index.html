@@ -19,21 +19,37 @@
     <div class="row">
         <div class="col">
             {% if user.is_authenticated %}
+
                 <!-- Выйти -->
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="">Выйти</button>
                 </form>
+
             {% else %}
+
                 <!-- Войти -->
                 {% include 'frontend/login_modal.html' %}
+
             {% endif %}
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown basket-container">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="true">Корзина</a>
+                    <ul class="dropdown-menu basket-items">
+                        <li><a href="#"></a></li>
+                    </ul>
+                </li>
+            </ul>
+
         </div>
     </div>
     <!-- End of Header -->
 
     <!-- Content -->
     <div class="row">
+
         {% for bookImage in booksImages %}
             <div class="col-3">
                 <img height="200px" src="{{ bookImage.image.url }}">
@@ -41,6 +57,7 @@
                 {{ bookImage.book.price }}
             </div>
         {% endfor %}
+
     </div>
     <!-- End of Content -->
 

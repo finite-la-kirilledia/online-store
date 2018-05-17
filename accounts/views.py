@@ -5,6 +5,7 @@ from .forms import UserLoginForm, UserCreationForm
 from frontend.views import index
 
 
+# TODO validation
 def login(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
