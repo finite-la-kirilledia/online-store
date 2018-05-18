@@ -6,5 +6,62 @@
 </head>
 <body>
 {{ book.name }}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+
+            <!-- Отзывы -->
+            <h3>Отзывы ({{ book.review_set.count }}):</h3>
+            <div class="reviews-section">
+                {% for review in book.review_set.all %}
+                    <div class="review">
+                        {{ review.rating }}
+                        {{ review.user.name }}
+                        {{ review.user.surname }}
+                        {{ review.updated }}
+                        {{ review.text }}
+
+                        <!-- Комментарии к отзыву -->
+                        <div class="comments">
+                            {% for comment in review.comment_set.all %}
+                                <div>
+                                    {{ comment.user.name }}
+                                    {{ comment.user.surname }}
+                                    {{ comment.updated }}
+                                    {{ comment.text }}
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        ставить комментарий к отзыву -->
+                        <form method="post" action="{% url 'add_comment' book.id review.id %}">
+                            {% csrf_token %}
+
+                            {{ commentForm }}
+                            <button type="submit">Оставить комментарий</button>
+                        </form>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+            <!-- Оставить отзыв -->
+            {% if user.is_authenticated %}
+                <form method="post" action="{% url 'add_review' book.id %}">
+                    {% csrf_token %}
+
+                    <div class="add-review">
+                        {{ reviewForm }}
+                        <button type="submit">Оставить отзыв</button>
+                    </div>
+                </form>
+            {% else %}
+                <p>Войдите, чтобы оставить отзыв</p>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
 </body>
 </html>

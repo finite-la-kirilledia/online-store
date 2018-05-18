@@ -87,11 +87,16 @@ class BookImage(models.Model):
 class Review(models.Model):
     text = models.TextField(blank=True, null=True, default=None)
     rating = models.IntegerField(default=0)
+    likes = models.IntegerField(default=0, blank=True, null=True)
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, blank=True, null=True, default=None)
 
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+    # def __str__(self):
+    #     return '{} {}: {} - {}'.format(self.user.name, self.user.surname, self.text, self.updated)
 
 
 class Comment(models.Model):

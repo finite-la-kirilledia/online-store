@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 
 from accounts.forms import UserLoginForm, UserCreationForm
 from books.models import *
+from books.forms import *
 
 
 def index(request):
@@ -20,6 +21,8 @@ def book_detail(request, book_id):
         'userLoginForm': UserLoginForm(),
         'userCreationForm': UserCreationForm(),
         'book': get_object_or_404(Book, id=book_id),
+        'reviewForm': ReviewForm(),
+        'commentForm': CommentForm(),
     }
 
     return render(request, 'frontend/book_detail.html', context)
