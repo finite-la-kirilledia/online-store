@@ -1,8 +1,17 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title></title>
+
+    <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="{% static 'frontend/css/libs/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'frontend/js/libs/jquery-3.2.1.slim.min.js' %}"></script>
+    <script src="{% static 'frontend/js/libs/popper.min.js' %}"></script>
+    <script src="{% static 'frontend/js/libs/bootstrap.min.js' %}"></script>
 </head>
 <body>
 {{ book.name }}
@@ -23,7 +32,10 @@
                         {{ review.text }}
 
                         <!-- Комментарии к отзыву -->
-                        <div class="comments">
+                        {% if review.comment_set.count != 0 %}
+                            <button type="button" onclick="showComments({{ review.id }})">Показать комментарии</button>
+                        {% endif %}
+                        <div class="comments" style="display: none" id="{{ review.id }}">
                             {% for comment in review.comment_set.all %}
                                 <div>
                                     {{ comment.user.name }}
@@ -34,13 +46,18 @@
                             {% endfor %}
                         </div>
 
-                        ставить комментарий к отзыву -->
-                        <form method="post" action="{% url 'add_comment' book.id review.id %}">
-                            {% csrf_token %}
+                        <!-- Оставить комментарий к отзыву -->
+                        <button type="type" onclick="showCommentForm('form'+{{ review.id }})">
+                            Оставить комментарий
+                        </button>
+                        <div id="form{{ review.id }}" style="display: none">
+                            <form method="post" action="{% url 'add_comment' book.id review.id %}">
+                                {% csrf_token %}
 
-                            {{ commentForm }}
-                            <button type="submit">Оставить комментарий</button>
-                        </form>
+                                {{ commentForm }}
+                                <button type="submit">Оставить комментарий</button>
+                            </form>
+                        </div>
                     </div>
                 {% endfor %}
 
@@ -63,5 +80,6 @@
         </div>
     </div>
 </div>
+<script src="{% static 'frontend/js/project/comments.js' %}"></script>
 </body>
 </html>
