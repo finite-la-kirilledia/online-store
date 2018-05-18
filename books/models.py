@@ -41,7 +41,7 @@ class Author(models.Model):
     bio = models.TextField(blank=True, null=True, default=None)
     birthday = models.DateField(blank=True, null=True, default=None)
 
-    country = models.ForeignKey(Country, on_delete=models.DO_NOTHING, blank=True, null=True, default=None)
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, default=None)
 
     def __str__(self):
         return self.name
@@ -62,10 +62,10 @@ class Book(models.Model):
     weight = models.IntegerField(blank=True, null=True, default=None)
     pub_year = models.IntegerField(blank=True, null=True, default=None)
 
-    status = models.ForeignKey(BookStatus, blank=True, null=True, default=None, on_delete=models.DO_NOTHING)
+    status = models.ForeignKey(BookStatus, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     authors = models.ManyToManyField(Author)
     categories = models.ManyToManyField(BookCategory)
-    publisher = models.ForeignKey(Publisher, blank=True, null=True, default=None, on_delete=models.DO_NOTHING)
+    publisher = models.ForeignKey(Publisher, blank=True, null=True, default=None, on_delete=models.SET_NULL)
 
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)

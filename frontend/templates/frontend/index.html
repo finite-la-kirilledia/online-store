@@ -14,7 +14,7 @@
     <script src="{% static 'frontend/js/libs/bootstrap.min.js' %}"></script>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
     <!-- Header -->
     <div class="row">
         <div class="col">
@@ -52,9 +52,31 @@
 
         {% for bookImage in booksImages %}
             <div class="col-3">
-                <img height="200px" src="{{ bookImage.image.url }}">
-                {{ bookImage.book.name }}
-                {{ bookImage.book.price }}
+
+                <!-- Картинка и название -->
+                <a href="{% url 'book_detail' bookImage.book_id %}">
+                    <div>
+                        <img height="200px" src="{{ bookImage.image.url }}">
+                    </div>
+
+                    <div>
+                        {{ bookImage.book.name }}
+                    </div>
+                </a>
+
+                <!-- Авторы -->
+                <div>
+                    {% for author in bookImage.book.authors.all %}
+                        <div style="display: inline-block"> <!-- TODO -->
+                            {{ author }}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Цена -->
+                <div>
+                    {{ bookImage.book.price }} $
+                </div>
             </div>
         {% endfor %}
 

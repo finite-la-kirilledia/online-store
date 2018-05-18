@@ -8,9 +8,21 @@ class BookImageInline(admin.TabularInline):
     extra = 0
 
 
+class BookAuthorInline(admin.TabularInline):
+    model = Book.authors.through
+    extra = 0
+
+
+class BookCategoryInline(admin.TabularInline):
+    model = Book.categories.through
+    extra = 0
+
+
 class BookAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Book._meta.fields]
-    inlines = [BookImageInline]
+    inlines = [BookAuthorInline, BookCategoryInline, BookImageInline]
+
+    exclude = ('authors', 'categories',)
 
     class Meta:
         model = Book

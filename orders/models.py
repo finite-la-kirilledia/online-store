@@ -19,7 +19,7 @@ class OrderStatus(models.Model):
 
 class Order(models.Model):
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    order_status = models.ForeignKey(OrderStatus, blank=True, null=True, default=None, on_delete=models.DO_NOTHING)
+    order_status = models.ForeignKey(OrderStatus, blank=True, null=True, default=None, on_delete=models.SET_NULL)
 
     address = models.CharField(max_length=225, blank=True, null=True, default=None)
     total_price = models.DecimalField(default=0, max_digits=5, decimal_places=2)
@@ -39,7 +39,7 @@ class Order(models.Model):
 
 class OrderLine(models.Model):
     order = models.ForeignKey(Order, blank=True, null=True, default=None, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, blank=True, null=True, default=None, on_delete=models.DO_NOTHING)
+    book = models.ForeignKey(Book, blank=True, null=True, default=None, on_delete=models.SET_NULL)
 
     price_per_item = models.DecimalField(default=0, max_digits=5, decimal_places=2)
 
