@@ -5,86 +5,73 @@
     <meta charset="UTF-8">
     <title></title>
 
-    <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
+    <script src="{% static 'frontend/js/libs/fontawesome.js' %}"></script>
 
     <!-- Bootstrap -->
     <link href="{% static 'frontend/css/libs/bootstrap.min.css' %}" rel="stylesheet">
     <script src="{% static 'frontend/js/libs/jquery-3.2.1.slim.min.js' %}"></script>
     <script src="{% static 'frontend/js/libs/popper.min.js' %}"></script>
     <script src="{% static 'frontend/js/libs/bootstrap.min.js' %}"></script>
+
+    <!-- Project -->
+    <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
 </head>
 <body>
+
+<!-- Header -->
+{% include 'frontend/header.html' %}
+
+<!-- Content -->
 <div class="container-fluid">
-    <!-- Header -->
-    <div class="row">
-        <div class="col">
-            {% if user.is_authenticated %}
-
-                <!-- Выйти -->
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="">Выйти</button>
-                </form>
-
-            {% else %}
-
-                <!-- Войти -->
-                {% include 'frontend/login_modal.html' %}
-
-            {% endif %}
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown basket-container">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="true">Корзина</a>
-                    <ul class="dropdown-menu basket-items">
-                        <li><a href="#"></a></li>
-                    </ul>
-                </li>
-            </ul>
-
-        </div>
-    </div>
-    <!-- End of Header -->
-
-    <!-- Content -->
-    <div class="row">
+    <div class="card-deck mb-3 text-center">
 
         {% for bookImage in booksImages %}
-            <div class="col-3">
+            <div class="card mb-4 box-shadow">
 
                 <!-- Картинка и название -->
                 <a href="{% url 'book_detail' bookImage.book_id %}">
-                    <div>
-                        <img height="200px" src="{{ bookImage.image.url }}">
+                    <div class="card-img text-center p-2 pt-4">
+                        <img height="185px" src="{{ bookImage.image.url }}">
                     </div>
 
-                    <div>
-                        {{ bookImage.book.name }}
+                    <div class="card-body">
+                        <div class="card-title pricing-card-title text-center">
+                            <h5>{{ bookImage.book.name }}</h5>
+                        </div>
+
+                        <ul class="list-unstyled mt-3 mb-0">
+
+                            <!-- Авторы и год -->
+                            {% for author in bookImage.book.authors.all %}
+                                <li class="text-muted">
+                                    {{ author.name }}, {{ bookImage.book.pub_year }}
+                                </li>
+                            {% endfor %}
+
+                            <!-- Цена -->
+                            <li class="price">
+                                {{ bookImage.book.price }} $
+                            </li>
+
+                            <!-- Рейтинг -->
+                            <li>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="far fa-star text-warning"></i>
+                            </li>
+
+                        </ul>
                     </div>
                 </a>
 
-                <!-- Авторы -->
-                <div>
-                    {% for author in bookImage.book.authors.all %}
-                        <div style="display: inline-block"> <!-- TODO -->
-                            {{ author.name }}
-                        </div>
-                    {% endfor %}
-                </div>
-
-                <!-- Цена -->
-                <div>
-                    {{ bookImage.book.price }} $
-                </div>
             </div>
         {% endfor %}
 
     </div>
-    <!-- End of Content -->
-
 </div>
-<!-- End of container -->
+<!-- End of content -->
 
 </body>
 </html>

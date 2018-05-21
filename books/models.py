@@ -86,7 +86,7 @@ class BookImage(models.Model):
 
 class Review(models.Model):
     text = models.TextField(blank=True, null=True, default=None)
-    rating = models.IntegerField(default=0)
+    rating = models.IntegerField(default=0, blank=True, null=True)
     likes = models.IntegerField(default=0, blank=True, null=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, default=None)

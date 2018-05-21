@@ -1,3 +1,22 @@
 body {
     overflow: scroll;
+    margin-bottom: 50px;
+}
+
+.card-deck .card {
+    min-width: 300px;
+    max-width: 300px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+
+}
+
+a .price {
+    color: #222 !important;
 }

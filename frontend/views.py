@@ -17,10 +17,13 @@ def index(request):
 
 
 def book_detail(request, book_id):
+    book = get_object_or_404(Book, id=book_id)
+
     context = {
         'userLoginForm': UserLoginForm(),
         'userCreationForm': UserCreationForm(),
-        'book': get_object_or_404(Book, id=book_id),
+        'book': book,
+        # 'bookImage': get_object_or_404(BookImage, id=book.),
         'reviewForm': ReviewForm(),
         'commentForm': CommentForm(),
     }

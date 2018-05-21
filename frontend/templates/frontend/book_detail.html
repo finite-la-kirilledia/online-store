@@ -5,81 +5,208 @@
     <meta charset="UTF-8">
     <title></title>
 
-    <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
+    <script src="{% static 'frontend/js/libs/fontawesome.js' %}"></script>
 
     <!-- Bootstrap -->
     <link href="{% static 'frontend/css/libs/bootstrap.min.css' %}" rel="stylesheet">
     <script src="{% static 'frontend/js/libs/jquery-3.2.1.slim.min.js' %}"></script>
     <script src="{% static 'frontend/js/libs/popper.min.js' %}"></script>
     <script src="{% static 'frontend/js/libs/bootstrap.min.js' %}"></script>
+
+    <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
+
+    <script src="{% static 'frontend/js/project/book_detail.js' %}"></script>
+    <script src="{% static 'frontend/js/project/basket.js' %}"></script>
 </head>
 <body>
-{{ book.name }}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col">
+<!-- Header -->
+{% include 'frontend/header.html' %}
 
-            <!-- Отзывы -->
-            <h3>Отзывы ({{ book.review_set.count }}):</h3>
-            <div class="reviews-section">
-                {% for review in book.review_set.all %}
-                    <div class="review">
-                        {{ review.rating }}
-                        {{ review.user.name }}
-                        {{ review.user.surname }}
-                        {{ review.updated }}
-                        {{ review.text }}
+<!-- Информация о книге -->
+<div class="container marketing pt-2">
+    <div class="row featurette">
+        <div class="col-md-7 order-md-2">
 
-                        <!-- Комментарии к отзыву -->
-                        {% if review.comment_set.count != 0 %}
-                            <button type="button" onclick="showComments({{ review.id }})">Показать комментарии</button>
-                        {% endif %}
-                        <div class="comments" style="display: none" id="{{ review.id }}">
-                            {% for comment in review.comment_set.all %}
-                                <div>
-                                    {{ comment.user.name }}
-                                    {{ comment.user.surname }}
-                                    {{ comment.updated }}
-                                    {{ comment.text }}
-                                </div>
-                            {% endfor %}
-                        </div>
+            <div class="row">
 
-                        <!-- Оставить комментарий к отзыву -->
-                        <button type="type" onclick="showCommentForm('form'+{{ review.id }})">
-                            Оставить комментарий
-                        </button>
-                        <div id="form{{ review.id }}" style="display: none">
-                            <form method="post" action="{% url 'add_comment' book.id review.id %}">
-                                {% csrf_token %}
+                <!-- Название книги -->
+                <h2 class="col-12 featurette-heading">{{ book.name }}</h2>
 
-                                {{ commentForm }}
-                                <button type="submit">Оставить комментарий</button>
-                            </form>
-                        </div>
-                    </div>
-                {% endfor %}
+                <!-- Авторы и год издания -->
+                <div class="col">
+                    <p>
+                        {% for author in book.authors.all %}
+                            {{ author.name }}, {{ book.pub_year }}
+                        {% endfor %}
+                    </p>
+                </div>
+
+                <!-- Рейтинг -->
+                <div class="col">
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                </div>
+
+                <!-- Количество отзывов -->
+                <div class="col">
+                    {{ book.review_set.count }} отзывов
+                </div>
+            </div>
+
+            {#            <div class="row border-top border-bottom">#}
+            {#                <div class="col-4 bg-light ">#}
+            {#                    <span class="d-block">Мягкая обложка</span>#}
+            {#                    <span class="small text-muted text-center">10$</span>#}
+            {#                </div>#}
+            {#                <div class="col">#}
+            {#                    <span class="d-block">Твёрдый переплёт</span>#}
+            {#                    <span class="small text-muted text-center">10$</span>#}
+            {#                </div>#}
+            {#            </div>#}
+
+            <div class="row">
+
+                <!-- Цена -->
+                <h3 class="col-12 pt-2 pb-2 d-block">{{ book.price }} $</h3>
+
+                <!-- Кнопка корзины -->
+                <button class="btn btn-warning text-white "><i class="fas fa-shopping-cart mr-2"></i>
+                    Положить в корзину
+                </button>
+
+                <!-- Статус книги -->
+                <div class="col-12">
+                    {{ book.status }}
+                </div>
+
+
+                <div class="col-12 p-0 mt-2">
+                    <p class="col-12 pt-2 pb-2 m-0 border rounded">
+                        Какой-то комент к книге
+                    </p>
+                    <small class="text-muted">
+                        Ru5 оставил отзыв
+                    </small>
+                </div>
 
             </div>
 
-            <!-- Оставить отзыв -->
-            {% if user.is_authenticated %}
-                <form method="post" action="{% url 'add_review' book.id %}">
-                    {% csrf_token %}
+        </div>
 
-                    <div class="add-review">
-                        {{ reviewForm }}
-                        <button type="submit">Оставить отзыв</button>
-                    </div>
-                </form>
-            {% else %}
-                <p>Войдите, чтобы оставить отзыв</p>
-            {% endif %}
-
+        <!-- Картинка к книге -->
+        <div class="col-md-5 order-md-1">
+            <img class="featurette-image img-fluid mx-auto" data-src="holder.js/500x500/auto" alt="500x500"
+                 src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22500%22%20height%3D%22500%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20500%20500%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16378f93342%20text%20%7B%20fill%3A%23AAAAAA%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A25pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16378f93342%22%3E%3Crect%20width%3D%22500%22%20height%3D%22500%22%20fill%3D%22%23EEEEEE%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22185.125%22%20y%3D%22261.1%22%3E500x500%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"
+                 data-holder-rendered="true" style="width: 500px; height: 500px;">
         </div>
     </div>
 </div>
-<script src="{% static 'frontend/js/project/comments.js' %}"></script>
+
+
+<div class="container-fluid">
+
+    <!-- Отзывы -->
+    <div class="container marketing pt-2">
+        <div class="row">
+
+            <!-- Отзыв -->
+            <h5 style="color:#222;">Отзывы ({{ book.review_set.count }}):</h5>
+            {% for review in book.review_set.all %}
+                <div class="col-12">
+
+                    <!-- Рейтинг -->
+                    <!-- TODO RATING -->
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+                    <i class="fas fa-star text-warning"></i>
+
+                    <!-- Имя, фамилия и дата -->
+                    <span class="text-muted">{{ review.user.name }} {{ review.user.surname }} {{ review.updated }}</span>
+
+                    <!-- Лайки -->
+                    <span class="float-right p-1 text-success bg-light rounded">+{{ review.likes }}</span>
+                </div>
+
+                <!-- Текст отзыва-->
+                <div class="col-12">
+                    <p>
+                        {{ review.text }}
+                    </p>
+                </div>
+
+                <!-- Секция с комментариями -->
+                <div class="col-12">
+
+                    {% if review.comment_set.count != 0 %}
+                        <button type="button" class="btn btn-light" onclick="showComments({{ review.id }})">
+                            Показать комментарии
+                        </button>
+                    {% endif %}
+
+                    <!-- Оставить комментарий к отзыву -->
+                    <button type="type" class="btn btn-light" onclick="showCommentForm('form'+{{ review.id }})"
+                            style="margin-left: 10px;">
+                        Оставить комментарий
+                    </button>
+                    <div id="form{{ review.id }}" style="display: none">
+                        <form method="post" action="{% url 'add_comment' book.id review.id %}">
+                            {% csrf_token %}
+
+                            {{ commentForm }}
+                            <button type="submit" class="btn btn-light">Отправить</button>
+                        </form>
+                    </div>
+
+                    <!-- Комментарии -->
+                    <div class="col-12 border-left mt-2 mb-2">
+                        <div class="col-12" style="display: none" id="{{ review.id }}">
+                            {% for comment in review.comment_set.all %}
+                                <span class="text-muted">{{ comment.user.name }} {{ comment.user.surname }} {{ comment.updated }}</span>
+                                <p class="col-12">
+                                    {{ comment.text }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+            <!-- Оставить отзыв -->
+            {% if user.is_authenticated %}
+
+                <div class="col-12">
+                    <button type="type" class="btn btn-dark" onclick="showReviewForm()">
+                        Оставить отзыв
+                    </button>
+                </div>
+
+                <!-- Форма для отзыва -->
+                <div class="col-12" style="display: none" id="reviewForm">
+                    <form method="post" action="{% url 'add_review' book.id %}">
+                        {% csrf_token %}
+
+                        <div>
+                            {{ reviewForm }}
+                            <button type="submit" class="btn btn-light">Отправить</button>
+                        </div>
+                    </form>
+                </div>
+
+            {% else %}
+
+                <p>Войдите, чтобы оставить отзыв</p>
+
+            {% endif %}
+
+        </div> <!-- End of row -->
+    </div>
+</div>
 </body>
 </html>
