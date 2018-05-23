@@ -24,7 +24,7 @@
 {% include 'frontend/header.html' %}
 
 <!-- Информация о книге -->
-<div class="container marketing pt-2">
+<div class="container marketing pt-2" style="margin-bottom: 50px;">
     <div class="row featurette">
         <div class="col-md-7 order-md-2">
 
@@ -60,17 +60,6 @@
                 </div>
             </div>
 
-            {#            <div class="row border-top border-bottom">#}
-            {#                <div class="col-4 bg-light ">#}
-            {#                    <span class="d-block">Мягкая обложка</span>#}
-            {#                    <span class="small text-muted text-center">10$</span>#}
-            {#                </div>#}
-            {#                <div class="col">#}
-            {#                    <span class="d-block">Твёрдый переплёт</span>#}
-            {#                    <span class="small text-muted text-center">10$</span>#}
-            {#                </div>#}
-            {#            </div>#}
-
             <div class="row">
 
                 <!-- Цена -->
@@ -81,26 +70,28 @@
                     {% csrf_token %}
                     <button type="submit" id="basket_btn"
                             data-book_id="{{ book.id }}" data-user_id="{{ user.id }}"
-                            class="btn btn-warning text-white "><i
-                            class="fas fa-shopping-cart mr-2"></i>
+                            class="btn btn-warning text-white ">
+                        <i class="fas fa-shopping-cart mr-2"></i>
                         Положить в корзину
                     </button>
                 </form>
 
                 <!-- Статус книги -->
-                <div class="col-12">
+                <div class="col-12" style="padding: 8px;">
                     {{ book.status }}
                 </div>
 
-
-                <div class="col-12 p-0 mt-2">
-                    <p class="col-12 pt-2 pb-2 m-0 border rounded">
-                        {{ book.review_set.filter }}
-                    </p>
-                    <small class="text-muted">
-                        Ru5 оставил отзыв
-                    </small>
-                </div>
+                {% if top_rated_review != None %}
+                    <!-- Top rated отзыв -->
+                    <div class="col-12 p-0 mt-2">
+                        <p class="col-12 pt-2 pb-2 m-0 border rounded">
+                            {{ top_rated_review.text }}
+                        </p>
+                        <small class="text-muted">
+                            {{ top_rated_review.user.name }} {{ top_rated_review.user.surname }} оставил отзыв
+                        </small>
+                    </div>
+                {% endif %}
 
             </div>
 
@@ -115,11 +106,12 @@
     </div>
 </div>
 
-
 <div class="container-fluid">
+    <hr>
 
     <!-- Секция отзывов -->
-    <div class="container marketing pt-2" style="margin-top: 50px;">
+    <div class="container marketing pt-2" style="margin-top: 30px;">
+
         <div class="row">
 
             <!-- Отзывы -->

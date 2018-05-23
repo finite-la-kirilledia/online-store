@@ -19,11 +19,18 @@ def index(request):
 def book_detail(request, book_id):
     book = get_object_or_404(Book, id=book_id)
 
+    likes = 0
+    top_rated_review = book.review_set.first()
+    for review in book.review_set.all():
+        if review.comment_set.count() > likes:
+            likes = review.comment_set.count()
+            top_rated_review = review
+
     context = {
         'userLoginForm': UserLoginForm(),
         'userCreationForm': UserCreationForm(),
         'book': book,
-        # 'bookImage': get_object_or_404(BookImage, id=book.),
+        'top_rated_review': top_rated_review,
         'reviewForm': ReviewForm(),
         'commentForm': CommentForm(),
     }

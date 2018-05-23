@@ -1,10 +1,32 @@
 <!-- Header -->
-<nav class="site-header  bg-light py-1 p-2 mb-2">
+<nav class="site-header  bg-light py-1 p-2 mb-2" xmlns="http://www.w3.org/1999/html">
     <div class="container d-flex flex-column flex-md-row justify-content-between">
 
         <!-- На главную -->
-        <a href="{% url 'index' %}"><i class="fas fa-home"></i></a>
+        <a href="{% url 'index' %}"><i class="fas fa-home fa-lg" style="margin-top: 9px;"></i></a>
 
+        <!-- Поиск -->
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+        </form>
+
+        <!-- Корзина -->
+        {% if user.is_authenticated %}
+            <form id="basket" action="{% url 'checkout' user.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-light">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Корзина
+                </button>
+            </form>
+        {% else %}
+            <a tabindex="0" class="btn btn-dark" role="button" data-toggle="popover" data-trigger="focus"
+               data-placement="bottom"
+               data-content="Нужно авторизироваться">Корзина</a>
+        {% endif %}
+
+        <!-- Вход/Выход -->
         {% if user.is_authenticated %}
 
             <!-- Выйти -->
@@ -18,20 +40,6 @@
             <!-- Войти -->
             {% include 'frontend/login_modal.html' %}
 
-        {% endif %}
-
-        <!-- Корзина -->
-        {% if user.is_authenticated %}
-            <form id="basket" action="{% url 'checkout' user.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-dark">
-                    Корзина
-                </button>
-            </form>
-        {% else %}
-            <a tabindex="0" class="btn btn-dark" role="button" data-toggle="popover" data-trigger="focus"
-               data-placement="bottom"
-               data-content="Нужно авторизироваться">Корзина</a>
         {% endif %}
 
     </div>

@@ -79,7 +79,10 @@ class Book(models.Model):
         for review in self.review_set.all():
             rating += review.rating
 
-        return int(rating / count)
+        if count != 0:
+            return int(rating / count)
+        else:
+            return 0
 
     def get_rating_in_str(self):
         s = ''
