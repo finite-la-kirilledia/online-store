@@ -9,12 +9,15 @@
 
     <!-- Bootstrap -->
     <link href="{% static 'frontend/css/libs/bootstrap.min.css' %}" rel="stylesheet">
-    <script src="{% static 'frontend/js/libs/jquery-3.2.1.slim.min.js' %}"></script>
+    <script src="{% static 'frontend/js/libs/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'frontend/js/libs/popper.min.js' %}"></script>
     <script src="{% static 'frontend/js/libs/bootstrap.min.js' %}"></script>
 
     <!-- Project -->
     <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
+
+{#    <script src="{% static 'frontend/js/project/book_detail.js' %}"></script>#}
+    <script src="{% static 'frontend/js/project/basket.js' %}"></script>
 </head>
 <body>
 
@@ -54,13 +57,12 @@
                             </li>
 
                             <!-- Рейтинг -->
-                            <li>
+                            {% for i in  bookImage.book.get_rating_in_str %}
                                 <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
-                                <i class="fas fa-star text-warning"></i>
+                            {% endfor %}
+                            {% for i in  bookImage.book.get_rest_stars %}
                                 <i class="far fa-star text-warning"></i>
-                            </li>
+                            {% endfor %}
 
                         </ul>
                     </div>

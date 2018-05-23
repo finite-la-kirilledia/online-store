@@ -9,13 +9,13 @@
 
     <!-- Bootstrap -->
     <link href="{% static 'frontend/css/libs/bootstrap.min.css' %}" rel="stylesheet">
-    <script src="{% static 'frontend/js/libs/jquery-3.2.1.slim.min.js' %}"></script>
+    <script src="{% static 'frontend/js/libs/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'frontend/js/libs/popper.min.js' %}"></script>
     <script src="{% static 'frontend/js/libs/bootstrap.min.js' %}"></script>
 
     <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
 
-    <script src="{% static 'frontend/js/project/book_detail.js' %}"></script>
+
     <script src="{% static 'frontend/js/project/basket.js' %}"></script>
 </head>
 <body>
@@ -43,17 +43,20 @@
                 </div>
 
                 <!-- Рейтинг -->
-                <div class="col">
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                </div>
+                <a href="#reviews">
+                    <div class="col">
+                        {% for i in  book.get_rating_in_str %}
+                            <i class="fas fa-star text-warning"></i>
+                        {% endfor %}
+                        {% for i in  book.get_rest_stars %}
+                            <i class="far fa-star text-warning"></i>
+                        {% endfor %}
+                    </div>
+                </a>
 
                 <!-- Количество отзывов -->
                 <div class="col">
-                    {{ book.review_set.count }} отзывов
+                    отзывы ({{ book.review_set.count }})
                 </div>
             </div>
 
@@ -73,10 +76,16 @@
                 <!-- Цена -->
                 <h3 class="col-12 pt-2 pb-2 d-block">{{ book.price }} $</h3>
 
-                <!-- Кнопка корзины -->
-                <button class="btn btn-warning text-white "><i class="fas fa-shopping-cart mr-2"></i>
-                    Положить в корзину
-                </button>
+                <!-- Кнопка положить в корзину -->
+                <form id="basket_form" method="post" action="{% url 'add_to_basket' %}">
+                    {% csrf_token %}
+                    <button type="submit" id="basket_btn"
+                            data-book_id="{{ book.id }}" data-user_id="{{ user.id }}"
+                            class="btn btn-warning text-white "><i
+                            class="fas fa-shopping-cart mr-2"></i>
+                        Положить в корзину
+                    </button>
+                </form>
 
                 <!-- Статус книги -->
                 <div class="col-12">
@@ -86,7 +95,7 @@
 
                 <div class="col-12 p-0 mt-2">
                     <p class="col-12 pt-2 pb-2 m-0 border rounded">
-                        Какой-то комент к книге
+                        {{ book.review_set.filter }}
                     </p>
                     <small class="text-muted">
                         Ru5 оставил отзыв
@@ -109,28 +118,78 @@
 
 <div class="container-fluid">
 
-    <!-- Отзывы -->
-    <div class="container marketing pt-2">
+    <!-- Секция отзывов -->
+    <div class="container marketing pt-2" style="margin-top: 50px;">
         <div class="row">
 
+            <!-- Отзывы -->
+            <h5 id="reviews" style="color:#222;">Отзывы ({{ book.review_set.count }}):</h5>
+
             <!-- Отзыв -->
-            <h5 style="color:#222;">Отзывы ({{ book.review_set.count }}):</h5>
             {% for review in book.review_set.all %}
                 <div class="col-12">
 
                     <!-- Рейтинг -->
-                    <!-- TODO RATING -->
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
-                    <i class="fas fa-star text-warning"></i>
+                    {% for i in  review.get_rating_in_str %}
+                        <i class="fas fa-star text-warning"></i>
+                    {% endfor %}
+                    {% for i in  review.get_rest_stars %}
+                        <i class="far fa-star text-warning"></i>
+                    {% endfor %}
 
                     <!-- Имя, фамилия и дата -->
                     <span class="text-muted">{{ review.user.name }} {{ review.user.surname }} {{ review.updated }}</span>
 
                     <!-- Лайки -->
-                    <span class="float-right p-1 text-success bg-light rounded">+{{ review.likes }}</span>
+                    <span id="likes{{ review.id }}" data-user_id="{{ user.id }}"
+                          data-review_id="{{ review.id }}"
+                          class="float-right p-1 text-success bg-light rounded">
+                    </span>
+                    <script type="text/javascript">
+                        $.ajax({
+                            url: 'get_likes_count',
+                            type: 'GET',
+                            data: {review_id: {{review.id}}},
+                            success: [function (data) {
+                                var likes = document.getElementById('likes' +{{ review.id }});
+                                likes.innerHTML = '+' + data['likes_count'];
+                            }]
+                        })
+                    </script>
+
+                    {% if user.is_authenticated %}
+
+                        <!-- Кнопка поставить лайк -->
+                        <span id="like-btn{{ review.id }}" onclick="like({{ user.id }},{{ review.id }})"
+                              class="float-right p-1">
+                            <i class="far fa-thumbs-up"></i>
+                        </span>
+
+                        <!-- Поставленный лайк -->
+                        <span id="liked-btn{{ review.id }}" class="float-right p-1">
+                            <i class="fas fa-thumbs-up"></i>
+                        </span>
+
+                        <script type="text/javascript">
+                            $.ajax({
+                                url: 'is_liked',
+                                type: 'GET',
+                                data: {review_id: {{review.id}}, user_id:{{user.id}}},
+                                success: [function (data) {
+                                    if (data['is_liked'] == true) {
+                                        document.getElementById('like-btn{{ review.id }}').style.display = 'none';
+                                        document.getElementById('liked-btn{{ review.id }}').style.display = 'block';
+                                    }
+                                    else {
+                                        document.getElementById('like-btn{{ review.id }}').style.display = 'block';
+                                        document.getElementById('liked-btn{{ review.id }}').style.display = 'none';
+                                    }
+                                }]
+                            })
+                        </script>
+
+                    {% endif %}
+
                 </div>
 
                 <!-- Текст отзыва-->
@@ -150,18 +209,20 @@
                     {% endif %}
 
                     <!-- Оставить комментарий к отзыву -->
-                    <button type="type" class="btn btn-light" onclick="showCommentForm('form'+{{ review.id }})"
-                            style="margin-left: 10px;">
-                        Оставить комментарий
-                    </button>
-                    <div id="form{{ review.id }}" style="display: none">
-                        <form method="post" action="{% url 'add_comment' book.id review.id %}">
-                            {% csrf_token %}
+                    {% if user.is_authenticated %}
+                        <button type="type" class="btn btn-light" onclick="showCommentForm('form'+{{ review.id }})"
+                                style="margin-left: 10px;">
+                            Оставить комментарий
+                        </button>
+                        <div id="form{{ review.id }}" style="display: none">
+                            <form method="post" action="{% url 'add_comment' book.id review.id %}">
+                                {% csrf_token %}
 
-                            {{ commentForm }}
-                            <button type="submit" class="btn btn-light">Отправить</button>
-                        </form>
-                    </div>
+                                {{ commentForm }}
+                                <button type="submit" class="btn btn-light">Отправить</button>
+                            </form>
+                        </div>
+                    {% endif %}
 
                     <!-- Комментарии -->
                     <div class="col-12 border-left mt-2 mb-2">
@@ -194,6 +255,18 @@
 
                         <div>
                             {{ reviewForm }}
+
+                            {#                            {% for i in  book.get_rating_in_str %}#}
+                            {#                                <i class="fas fa-star text-warning"></i>#}
+                            {#                            {% endfor %}#}
+                            {#                            {% for i in  book.get_rest_stars %}#}
+                            {#                                <i class="far fa-star text-warning"></i>#}
+                            {#                            {% endfor %}#}
+                            <i class="far fa-star text-warning" id="rating1" onclick="setRating(1)"></i>
+                            <i class="far fa-star text-warning" id="rating2" onclick="setRating(2)"></i>
+                            <i class="far fa-star text-warning" id="rating3" onclick="setRating(3)"></i>
+                            <i class="far fa-star text-warning" id="rating4" onclick="setRating(4)"></i>
+                            <i class="far fa-star text-warning" id="rating5" onclick="setRating(5)"></i>
                             <button type="submit" class="btn btn-light">Отправить</button>
                         </div>
                     </form>
@@ -208,5 +281,6 @@
         </div> <!-- End of row -->
     </div>
 </div>
+<script src="{% static 'frontend/js/project/book_detail.js' %}"></script>
 </body>
 </html>

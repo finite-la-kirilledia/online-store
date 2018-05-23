@@ -2,6 +2,9 @@
 <nav class="site-header  bg-light py-1 p-2 mb-2">
     <div class="container d-flex flex-column flex-md-row justify-content-between">
 
+        <!-- На главную -->
+        <a href="{% url 'index' %}"><i class="fas fa-home"></i></a>
+
         {% if user.is_authenticated %}
 
             <!-- Выйти -->
@@ -18,17 +21,18 @@
         {% endif %}
 
         <!-- Корзина -->
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown basket-container">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                   aria-expanded="true">Корзина <i class="fas fa-shopping-cart"></i></a>
-                <ul class="dropdown-menu basket-items text-center">
-                    <li><a href="#">Опция</a></li>
-                    <li><a href="#">Опция</a></li>
-                    <li><a href="#">Опция</a></li>
-                </ul>
-            </li>
-        </ul>
+        {% if user.is_authenticated %}
+            <form id="basket" action="{% url 'checkout' user.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-dark">
+                    Корзина
+                </button>
+            </form>
+        {% else %}
+            <a tabindex="0" class="btn btn-dark" role="button" data-toggle="popover" data-trigger="focus"
+               data-placement="bottom"
+               data-content="Нужно авторизироваться">Корзина</a>
+        {% endif %}
 
     </div>
 </nav>

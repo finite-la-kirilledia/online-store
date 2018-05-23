@@ -73,6 +73,28 @@ class Book(models.Model):
     def __str__(self):
         return '{} ${} - {}'.format(self.name, self.price, self.status)
 
+    def get_rating(self):
+        count = self.review_set.count()
+        rating = 0
+        for review in self.review_set.all():
+            rating += review.rating
+
+        return int(rating / count)
+
+    def get_rating_in_str(self):
+        s = ''
+        for i in range(0, self.get_rating()):
+            s += 'x'
+
+        return s
+
+    def get_rest_stars(self):
+        s = ''
+        for i in range(0, 5 - self.get_rating()):
+            s += 'x'
+
+        return s
+
 
 class BookImage(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
@@ -87,7 +109,6 @@ class BookImage(models.Model):
 class Review(models.Model):
     text = models.TextField(blank=True, null=True, default=None)
     rating = models.IntegerField(default=0, blank=True, null=True)
-    likes = models.IntegerField(default=0, blank=True, null=True)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, default=None)
     book = models.ForeignKey(Book, on_delete=models.CASCADE, blank=True, null=True, default=None)
@@ -95,8 +116,30 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
 
-    # def __str__(self):
-    #     return '{} {}: {} - {}'.format(self.user.name, self.user.surname, self.text, self.updated)
+    def __str__(self):
+        return '{}'.format(self.book)
+
+    def get_rating_in_str(self):
+        s = ''
+        for i in range(0, self.rating):
+            s += 'x'
+
+        return s
+
+    def get_rest_stars(self):
+        s = ''
+        for i in range(0, 5 - self.rating):
+            s += 'x'
+
+        return s
+
+
+class Like(models.Model):
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, blank=True, null=True, default=None)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, default=None)
+
+    created = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated = models.DateTimeField(auto_now_add=False, auto_now=True)
 
 
 class Comment(models.Model):

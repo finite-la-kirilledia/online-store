@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <script src="{% static 'frontend/js/libs/fontawesome.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'frontend/css/libs/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'frontend/js/libs/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'frontend/js/libs/popper.min.js' %}"></script>
+    <script src="{% static 'frontend/js/libs/bootstrap.min.js' %}"></script>
+
+    <!-- Project -->
+    <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
+</head>
+<body>
+
+<!-- Header -->
+{% include 'frontend/header.html' %}
+
+<!-- Content -->
+<div class="container-fluid">
+
+    {% for book in books %}
+
+        <input type="checkbox">
+
+        <!-- Картинка -->
+        {% for bookImage in book.bookimage_set.all %}
+            {% if bookImage.is_main == True %}
+                <img height="50px" src="{{ bookImage.image.url }}">
+            {% endif %}
+        {% endfor %}
+
+        <!-- Название книги -->
+        <p>{{ book.name }}</p>
+
+        <!-- Авторы -->
+        {% for author in  book.authors.all %}
+            <p>{{ author.name }}</p>
+        {% endfor %}
+
+        <!-- Год издания -->
+        <p>, {{ book.pub_year }}</p>
+
+        <!-- Статус -->
+        <p>{{ book.status }}</p>
+
+        <!-- Цена -->
+        <p>{{ book.price }} $</p>
+
+    {% endfor %}
+
+</div>
+<!-- End of content -->
+
+</body>
+</html>
