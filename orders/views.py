@@ -59,6 +59,10 @@ def is_in_basket(request):
 
 def delete_book_from_basket(request):
     basket = User.objects.get(id=request.GET.get('user_id')).basket
-    basket.basketelement_set.get(book=Book.objects.get(id=request.GET.get('book_id'))).delete()
+    book = Book.objects.get(id=request.GET.get('book_id'))
+
+    for basketelement in basket.basketelement_set.all():
+        if basketelement.book == book:
+            basketelement.delete()
 
     return HttpResponse()

@@ -16,7 +16,7 @@
     <!-- Project -->
     <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
 
-{#    <script src="{% static 'frontend/js/project/book_detail.js' %}"></script>#}
+    <script src="{% static 'frontend/js/project/book_detail.js' %}"></script>
     <script src="{% static 'frontend/js/project/basket.js' %}"></script>
 </head>
 <body>
@@ -25,24 +25,26 @@
 {% include 'frontend/header.html' %}
 
 <!-- Content -->
-<div class="container-fluid">
+<div class="container-fluid" style="padding-top: 10px;padding-left: 30px;">
     <div class="card-deck mb-3 text-center">
 
         {% for bookImage in booksImages %}
             <div class="card mb-4 box-shadow">
 
-                <!-- Картинка и название -->
                 <a href="{% url 'book_detail' bookImage.book_id %}">
-                    <div class="card-img text-center p-2 pt-4">
-                        <img height="185px" src="{{ bookImage.image.url }}">
+
+                    <!-- Картинка -->
+                    <div class="card-img text-center p-0 pt-3">
+                        <img height="150px" src="{{ bookImage.image.url }}">
                     </div>
 
+                    <!-- Название -->
                     <div class="card-body">
-                        <div class="card-title pricing-card-title text-center">
-                            <h5>{{ bookImage.book.name }}</h5>
+                        <div class="text-center">
+                            <h6>{{ bookImage.book.name }}</h6>
                         </div>
 
-                        <ul class="list-unstyled mt-3 mb-0">
+                        <ul class="list-unstyled mt-0 mb-0">
 
                             <!-- Авторы и год -->
                             {% for author in bookImage.book.authors.all %}

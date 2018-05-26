@@ -20,3 +20,39 @@ a:hover {
 a .price {
     color: #222 !important;
 }
+
+.custom-form-control {
+    margin-bottom: 20px;
+}
+
+.btn-basket {
+    color: #212529;
+    background-color: #EE7700;
+    border-color: #EE7700
+}
+
+.btn-basket:hover {
+    color: #212529;
+    background-color: #DD5500;
+    border-color: #DD5500
+}
+
+.btn-basket.focus, .btn-basket:focus {
+    box-shadow: 0 0 0 .2rem rgba(255, 193, 7, .5)
+}
+
+.btn-basket.disabled, .btn-basket:disabled {
+    color: #212529;
+    background-color: #EE7700;
+    border-color: #EE7700
+}
+
+.btn-basket:not(:disabled):not(.disabled).active, .btn-basket:not(:disabled):not(.disabled):active, .show > .btn-basket.dropdown-toggle {
+    color: #212529;
+    background-color: #DD5500;
+    border-color: #DD5500
+}
+
+.btn-basket:not(:disabled):not(.disabled).active:focus, .btn-basket:not(:disabled):not(.disabled):active:focus, .show > .btn-basket.dropdown-toggle:focus {
+    box-shadow: 0 0 0 .2rem rgba(255, 193, 7, .5)
+}
