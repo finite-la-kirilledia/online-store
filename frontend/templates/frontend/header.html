@@ -21,9 +21,14 @@
                 </button>
             </form>
         {% else %}
-            <a tabindex="0" class="btn btn-dark" role="button" data-toggle="popover" data-trigger="focus"
+            <a tabindex="0" data-toggle="popover" data-trigger="focus"
                data-placement="bottom"
-               data-content="Нужно авторизироваться">Корзина</a>
+               data-content="Нужно авторизироваться">
+                <button type="submit" class="btn btn-light">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Корзина
+                </button>
+            </a>
         {% endif %}
 
         <!-- Вход/Выход -->

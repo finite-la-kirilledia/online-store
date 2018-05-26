@@ -15,6 +15,7 @@
 
     <!-- Project -->
     <link href="{% static 'frontend/css/style.css' %}" rel="stylesheet">
+    <script src="{% static 'frontend/js/project/checkout.js' %}"></script>
 </head>
 <body>
 
@@ -26,7 +27,7 @@
 
     {% for book in books %}
 
-        <input type="checkbox">
+        {#        {{ checkboxForm }}#}
 
         <!-- Картинка -->
         {% for bookImage in book.bookimage_set.all %}
@@ -51,6 +52,13 @@
 
         <!-- Цена -->
         <p>{{ book.price }} $</p>
+
+        <form method="post" action="{% url 'delete_from_basket' user.id book.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light ">
+                Удалить
+            </button>
+        </form>
 
     {% endfor %}
 

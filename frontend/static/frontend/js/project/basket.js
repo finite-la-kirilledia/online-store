@@ -18,9 +18,10 @@ $(document).ready(function () {
 
         $.ajax({
             url: url,
-            type: 'PUT',
+            type: 'POST',
             data: data,
             success: [function (data) {
+                is_in_basket(user_id, book_id);
             }],
             error: function () {
                 console.log("error")
@@ -38,3 +39,4 @@ $(document).ready(function () {
 
 
 })
+

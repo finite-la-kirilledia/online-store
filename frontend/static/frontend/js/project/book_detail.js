@@ -65,3 +65,49 @@ function like(user_id, review_id) {
         }]
     })
 }
+
+function is_in_basket(user_id, book_id) {
+    var data = {user_id: user_id, book_id: book_id};
+
+    $.ajax({
+        type: 'get',
+        url: 'is_in_basket',
+        data: data,
+        success: function (data) {
+            var basket_form = document.getElementById('basket_form');
+            var basket_check = document.getElementById('basket_check');
+
+            if (data['is_in_basket'] == true) {
+                basket_form.style.display = 'none';
+                basket_check.style.display = 'block';
+            }
+            else {
+                basket_form.style.display = 'block';
+                basket_check.style.display = 'none';
+            }
+        },
+        error: function () {
+            console.log('error')
+        }
+        ,
+    })
+}
+
+function delete_from_basket(user_id, book_id) {
+    var data = {
+        user_id: user_id,
+        book_id: book_id,
+    }
+
+    $.ajax({
+        url: 'delete_book_from_basket',
+        type: 'GET',
+        data: data,
+        success: [function (data) {
+            is_in_basket(user_id, book_id);
+        }],
+        error: function () {
+            console.log("error")
+        }
+    })
+}
