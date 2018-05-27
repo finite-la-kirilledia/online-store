@@ -28,9 +28,23 @@ function showReviewForm() {
     }
 }
 
-$(document).ready(function () {
+function setRating(rating, id) {
+    document.getElementById('rating').value = rating;
 
-})
+    let int_id = id.substring(id.length - 1);
+
+    for (let i = 1; i <= 5; i++) {
+        let star = document.getElementById('rating' + i);
+        star.classList.add('far');
+        star.classList.remove('fas');
+    }
+
+    for (let i = 1; i <= int_id; i++) {
+        let star = document.getElementById('rating' + i);
+        star.classList.add('fas');
+        star.classList.remove('far');
+    }
+}
 
 function like(user_id, review_id) {
     $.ajax({

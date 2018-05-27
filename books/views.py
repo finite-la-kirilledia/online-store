@@ -9,7 +9,10 @@ def add_review(request, book_id):
         form = ReviewForm(request.POST)
 
         if form.is_valid():
-            review = Review(user=request.user, book=Book.objects.get(pk=book_id), text=request.POST['text'])
+            rating = request.POST['rating']
+            review = Review(user=request.user, book=Book.objects.get(pk=book_id), text=request.POST['text'],
+                            rating=rating)
+
             review.save()
 
             return redirect('book_detail', book_id)

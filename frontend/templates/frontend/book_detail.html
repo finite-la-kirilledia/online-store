@@ -369,20 +369,20 @@
                         {% csrf_token %}
 
                         <div>
-                            {{ reviewForm }}
+                            <input id="rating" type="hidden" name="rating" value="5">
+                            <p>
+                                {{ reviewForm }}
+                            </p>
 
-                            {#                            {% for i in  book.get_rating_in_str %}#}
-                            {#                                <i class="fas fa-star text-warning"></i>#}
-                            {#                            {% endfor %}#}
-                            {#                            {% for i in  book.get_rest_stars %}#}
-                            {#                                <i class="far fa-star text-warning"></i>#}
-                            {#                            {% endfor %}#}
-                            <i class="far fa-star text-warning" id="rating1" onclick="setRating(1)"></i>
-                            <i class="far fa-star text-warning" id="rating2" onclick="setRating(2)"></i>
-                            <i class="far fa-star text-warning" id="rating3" onclick="setRating(3)"></i>
-                            <i class="far fa-star text-warning" id="rating4" onclick="setRating(4)"></i>
-                            <i class="far fa-star text-warning" id="rating5" onclick="setRating(5)"></i>
-                            <button type="submit" class="btn btn-light">Отправить</button>
+                            <i class="far fa-star text-warning" id="rating1" onclick="setRating(1, 'rating1')"></i>
+                            <i class="far fa-star text-warning" id="rating2" onclick="setRating(2, 'rating2')"></i>
+                            <i class="far fa-star text-warning" id="rating3" onclick="setRating(3, 'rating3')"></i>
+                            <i class="far fa-star text-warning" id="rating4" onclick="setRating(4, 'rating4')"></i>
+                            <i class="far fa-star text-warning" id="rating5" onclick="setRating(5, 'rating5')"></i>
+
+                            <p>
+                                <button type="submit" class="btn btn-light">Отправить</button>
+                            </p>
                         </div>
                     </form>
                 </div>
