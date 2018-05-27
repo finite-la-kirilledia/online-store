@@ -1,8 +1,8 @@
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 
+from frontend.views import index
 from orders.models import *
-from orders.forms import CheckboxForm
 
 
 def add_to_basket(request):
@@ -21,13 +21,16 @@ def add_to_basket(request):
 
 
 def checkout(request, user_id):
-    basket = User.objects.get(id=user_id).basket
+    basket, created = Basket.objects.get_or_create(user=User.objects.get(id=user_id))
+    basket.save()
 
     books = []
     for item in basket.basketelement_set.all():
         books.append(item.book)
 
-    checkboxForm = CheckboxForm()
+    total_price = 0
+    for item in basket.basketelement_set.all():
+        total_price += item.price
 
     return render(request, 'frontend/checkout.html', locals())
 
@@ -66,3 +69,25 @@ def delete_book_from_basket(request):
             basketelement.delete()
 
     return HttpResponse()
+
+
+def checkout_done(request, user_id):
+    user = User.objects.get(id=user_id)
+    basket = Basket.objects.get(user=user)
+
+    order = Order(customer=user)
+    order.save()
+    for item in basket.basketelement_set.all():
+        orderelement = OrderElement(order=order, book=item.book, price=item.price)
+        orderelement.save()
+
+    order.address = request.POST.get('address')
+    order_status = OrderStatus.objects.get(name='Новый')
+    order.order_status = order_status
+    order.save()
+
+    basket.delete()
+    for item in basket.basketelement_set.all():
+        item.delete()
+
+    return index(request)

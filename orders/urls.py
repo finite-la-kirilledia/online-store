@@ -7,4 +7,5 @@ urlpatterns = [
     path('delete_from_basket/<int:user_id>/<int:book_id>', views.delete_from_basket, name='delete_from_basket'),
     path('book/is_in_basket', views.is_in_basket, name='is_in_basket'),
     path('book/delete_book_from_basket', views.delete_book_from_basket, name='delete_book_from_basket'),
+    path('checkout_done/<int:user_id>', views.checkout_done, name='checkout_done'),
 ]

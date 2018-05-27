@@ -25,42 +25,59 @@
 <!-- Content -->
 <div class="container-fluid">
 
-    {% for book in books %}
+    {% if books|length == 0 %}
+        Ваша корзина пуста
+    {% else %}
+        {% for book in books %}
 
-        {#        {{ checkboxForm }}#}
+            <!-- Картинка -->
+            {% for bookImage in book.bookimage_set.all %}
+                {% if bookImage.is_main == True %}
+                    <img height="50px" src="{{ bookImage.image.url }}">
+                {% endif %}
+            {% endfor %}
 
-        <!-- Картинка -->
-        {% for bookImage in book.bookimage_set.all %}
-            {% if bookImage.is_main == True %}
-                <img height="50px" src="{{ bookImage.image.url }}">
-            {% endif %}
+            <!-- Название книги -->
+            <p>{{ book.name }}</p>
+
+            <!-- Авторы -->
+            {% for author in  book.authors.all %}
+                <p>{{ author.name }}</p>
+            {% endfor %}
+
+            <!-- Год издания -->
+            <p>, {{ book.pub_year }}</p>
+
+            <!-- Статус -->
+            <p>{{ book.status }}</p>
+
+            <!-- Цена -->
+            <p>{{ book.price }} $</p>
+
+            <form method="post" action="{% url 'delete_from_basket' user.id book.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-light ">
+                    Удалить
+                </button>
+            </form>
+
         {% endfor %}
 
-        <!-- Название книги -->
-        <p>{{ book.name }}</p>
-
-        <!-- Авторы -->
-        {% for author in  book.authors.all %}
-            <p>{{ author.name }}</p>
-        {% endfor %}
-
-        <!-- Год издания -->
-        <p>, {{ book.pub_year }}</p>
-
-        <!-- Статус -->
-        <p>{{ book.status }}</p>
-
-        <!-- Цена -->
-        <p>{{ book.price }} $</p>
-
-        <form method="post" action="{% url 'delete_from_basket' user.id book.id %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-light ">
-                Удалить
+        {{ user.name }} {{ user.surname }}
+        {{ user.phone }}
+        <form method="post" action="{% url 'checkout_done' user.id %}">{% csrf_token %}
+            <div class="form-group">
+                <input name="address" class="form-control form-inline" placeholder="Адрес">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                Оформить заказ
             </button>
         </form>
+        Ваш заказ будет стоить
+        {{ total_price }} $
 
-    {% endfor %}
+    {% endif %}
+
 
 </div>
 <!-- End of content -->
