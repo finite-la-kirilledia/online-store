@@ -3,6 +3,7 @@ from django.shortcuts import render
 
 from frontend.views import index
 from orders.models import *
+from books.models import *
 
 
 def add_to_basket(request):

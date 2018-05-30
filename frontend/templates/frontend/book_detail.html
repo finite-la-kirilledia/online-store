@@ -73,7 +73,7 @@
                     <!-- Кнопка положить в корзину -->
                     <form id="basket_form" method="post" action="{% url 'add_to_basket' %}">
                         {% csrf_token %}
-                        <button type="submit" id="basket_btn"
+                        <button type="submit" id="basket_btn" 
                                 data-book_id="{{ book.id }}" data-user_id="{{ user.id }}"
                                 class="btn btn-basket text-white ">
                             <i class="fas fa-shopping-cart mr-2"></i>
@@ -159,7 +159,7 @@
             <img data-toggle="modal" data-target="#exampleModalLong" class="featurette-image img-fluid mx-auto"
                  data-src="holder.js/500x500/auto" alt="500x500"
                  src="{{ book.bookimage_set.all.first.image.url }}"
-                 data-holder-rendered="true" style="width: 300px;">
+                 data-holder-rendered="true" style="width: 250px;">
 
 
             <!-- Modal -->
@@ -330,10 +330,10 @@
                             Оставить комментарий
                         </button>
                         <div id="form{{ review.id }}" style="display: none">
-                            <form method="post" action="{% url 'add_comment' book.id review.id %}">
-                                {% csrf_token %}
-
-                                {{ commentForm }}
+                            <form method="post" action="{% url 'add_comment' book.id review.id %}">{% csrf_token %}
+                                <div class="mt-2 mb-2">
+                                    {{ commentForm }}
+                                </div>
                                 <button type="submit" class="btn btn-light">Отправить</button>
                             </form>
                         </div>
@@ -357,7 +357,7 @@
             <!-- Оставить отзыв -->
             {% if user.is_authenticated %}
 
-                <div class="col-12" style="margin: 20px 0 0 50px">
+                <div class="col-12" style="margin: 20px 0 20px 0">
                     <button type="type" class="btn btn-dark" onclick="showReviewForm()">
                         Оставить отзыв
                     </button>
@@ -369,19 +369,20 @@
                         {% csrf_token %}
 
                         <div>
-                            <input id="rating" type="hidden" name="rating" value="5">
+                            <input id="rating" type="hidden" name="rating" value="3">
                             <p>
                                 {{ reviewForm }}
                             </p>
 
-                            <i class="far fa-star text-warning" id="rating1" onclick="setRating(1, 'rating1')"></i>
-                            <i class="far fa-star text-warning" id="rating2" onclick="setRating(2, 'rating2')"></i>
-                            <i class="far fa-star text-warning" id="rating3" onclick="setRating(3, 'rating3')"></i>
+                            Ваша оценка книге:
+                            <i class="fas fa-star text-warning" id="rating1" onclick="setRating(1, 'rating1')"></i>
+                            <i class="fas fa-star text-warning" id="rating2" onclick="setRating(2, 'rating2')"></i>
+                            <i class="fas fa-star text-warning" id="rating3" onclick="setRating(3, 'rating3')"></i>
                             <i class="far fa-star text-warning" id="rating4" onclick="setRating(4, 'rating4')"></i>
                             <i class="far fa-star text-warning" id="rating5" onclick="setRating(5, 'rating5')"></i>
 
                             <p>
-                                <button type="submit" class="btn btn-light">Отправить</button>
+                                <button type="submit" class="btn btn-light mt-2">Отправить</button>
                             </p>
                         </div>
                     </form>

@@ -22,65 +22,78 @@
 <!-- Header -->
 {% include 'frontend/header.html' %}
 
-<!-- Content -->
-<div class="container-fluid">
+{% if books|length == 0 %}
 
-    {% if books|length == 0 %}
-        Ваша корзина пуста
-    {% else %}
-        {% for book in books %}
+    <div class="row col-12">
+        <h3 style="margin: 40px auto">Ваша корзина пуста</h3>
+    </div>
 
-            <!-- Картинка -->
-            {% for bookImage in book.bookimage_set.all %}
-                {% if bookImage.is_main == True %}
-                    <img height="50px" src="{{ bookImage.image.url }}">
-                {% endif %}
-            {% endfor %}
+{% else %}
+    <div class="row col-12">
+        <div class="row col-8">
 
-            <!-- Название книги -->
-            <p>{{ book.name }}</p>
+            <div class="row featurette m-2">
+                {% for book in books %}
 
-            <!-- Авторы -->
-            {% for author in  book.authors.all %}
-                <p>{{ author.name }}</p>
-            {% endfor %}
+                    <!-- Элемент корзины -->
+                    <div class="col-md-2">
+                        <img class="featurette-image img-fluid mx-auto" data-src="holder.js/100x100/auto"
+                             alt="500x500"
+                             src="{{ book.bookimage_set.first.image.url }}"
+                             data-holder-rendered="true" style=" height: 100px;">
+                    </div>
+                    <div class="col-md-5">
+                        <div class="row">
+                            <p class="col-12 mb-0">{{ book.name }}</p>
+                            <p class="col-12 mb-0 text-muted">{{ book.authors.first.name }}, {{ book.pub_year }}</p>
+                            <p class="col-12 mb-0 text-muted">{{ book.status }}</p>
+                        </div>
+                    </div>
+                    <div class="row col-md-3">
+                        <div class="col-4 float-right">
+                            <span class="small text-muted text-center">{{ book.price }}$</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <form method="post" action="{% url 'delete_from_basket' user.id book.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-light ">
+                                Удалить
+                            </button>
+                        </form>
+                    </div>
 
-            <!-- Год издания -->
-            <p>, {{ book.pub_year }}</p>
-
-            <!-- Статус -->
-            <p>{{ book.status }}</p>
-
-            <!-- Цена -->
-            <p>{{ book.price }} $</p>
-
-            <form method="post" action="{% url 'delete_from_basket' user.id book.id %}">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-light ">
-                    Удалить
-                </button>
-            </form>
-
-        {% endfor %}
-
-        {{ user.name }} {{ user.surname }}
-        {{ user.phone }}
-        <form method="post" action="{% url 'checkout_done' user.id %}">{% csrf_token %}
-            <div class="form-group">
-                <input name="address" class="form-control form-inline" placeholder="Адрес">
+                {% endfor %}
             </div>
-            <button type="submit" class="btn btn-primary">
-                Оформить заказ
-            </button>
-        </form>
-        Ваш заказ будет стоить
-        {{ total_price }} $
+        </div>
 
-    {% endif %}
-
-
-</div>
-<!-- End of content -->
+        <div class="col-4">
+            <div class="border rounded p-0">
+                <form method="post" action="{% url 'checkout_done' user.id %}">{% csrf_token %}
+                    <div class="col-12 bg-secondary border-bottom text-white pt-2 pb-2">
+                        <p class="m-0">Ваш заказ</p>
+                    </div>
+                    <div class="col-12 border-bottom p-2">
+                        <label class="m-0">Имя: {{ user.name }}</label>
+                    </div>
+                    <div class="col-12 border-bottom p-2">
+                        <label class="m-0">Фамилия: {{ user.surname }}</label>
+                    </div>
+                    <div class="col-12 border-bottom p-2">
+                        <label class="m-0">Телефон: {{ user.phone }}</label>
+                    </div>
+                    <div class="col-12 border-bottom p-2 form-group">
+                        <input name="address" class="form-control form-inline" placeholder="Введите свой адрес">
+                    </div>
+                    <div class="col-12 border-bottom pb-2 text-center">
+                        <h4>Общая стоимость: {{ total_price }} $</h4>
+                    </div>
+                    <button class="btn btn-primary btn-lg btn-block rounded-0 ">Оформить заказ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endif %}
 
 </body>
 </html>

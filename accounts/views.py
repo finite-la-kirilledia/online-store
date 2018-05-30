@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 
 from .forms import UserLoginForm, UserCreationForm
@@ -15,6 +15,8 @@ def login(request):
             password = form.cleaned_data['password']
             user = authenticate(email=email, password=password)
             django_login(request, user)
+            if user.is_admin:
+                return redirect('/admin')
 
             return index(request)
 
