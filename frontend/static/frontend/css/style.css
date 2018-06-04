@@ -56,3 +56,32 @@ a .price {
 .btn-basket:not(:disabled):not(.disabled).active:focus, .btn-basket:not(:disabled):not(.disabled):active:focus, .show > .btn-basket.dropdown-toggle:focus {
     box-shadow: 0 0 0 .2rem rgba(255, 193, 7, .5)
 }
+
+.carousel-indicators {
+    display: block;
+    float: left;
+    position: absolute;
+    left: -132px;
+    top: 0;
+    width: 120px;
+}
+
+.carousel-indicators img {
+    height: 96px;
+    display: block;
+    margin: 0 auto;
+}
+
+.carousel-indicators li {
+    text-align: center;
+    position: static;
+    display: block;
+    width: 104px;
+    height: 100px;
+    margin: 2px;
+    padding: 2px;
+}
+
+.carousel-indicators .active {
+    border: 1px blue solid;
+}

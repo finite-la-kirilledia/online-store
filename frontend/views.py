@@ -27,10 +27,16 @@ def book_detail(request, book_id):
             likes = review.comment_set.count()
             top_rated_review = review
 
+    other_images = []
+    for bookImage in book.bookimage_set.all():
+        if bookImage.is_main == False:
+            other_images.append(bookImage)
+
     context = {
         'userLoginForm': UserLoginForm(),
         'userCreationForm': UserCreationForm(),
         'book': book,
+        'other_images': other_images,
         'top_rated_review': top_rated_review,
         'reviewForm': ReviewForm(),
         'commentForm': CommentForm(),
